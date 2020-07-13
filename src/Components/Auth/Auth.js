@@ -23,7 +23,7 @@ class Auth extends Component {
         axios.post('api/login', {username, password})
         .then(res => {
             this.props.getUser(res.data)
-            this.props.history.push('/dash');
+            this.props.history.push('/dashboard');
         })
         .catch(err => console.log(err));
 
@@ -34,7 +34,7 @@ class Auth extends Component {
         axios.post('api/register', {username, password, profile_picture: `https://robohash.org/${username}.jpg`})
         .then(res => {
             this.props.getUser(res.data);
-            this.props.history.push('/dash');
+            this.props.history.push('/dashboard');
         })
         .catch(err => console.log(err));
     }
