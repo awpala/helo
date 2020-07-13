@@ -11,7 +11,7 @@ const Nav = props => {
                 ? (
                     <nav>
                         <div>
-                            <img src={props.user.profile_picture} alt={props.user.profile_picture}/>
+                            <img src={props.user.profile_picture} alt={props.user.username}/>
                             <p>{props.user.username}</p>
                         </div>
                         <Link to='/dashboard' className='nav-links'>
