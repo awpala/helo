@@ -1,29 +1,36 @@
-import React, {Component} from 'react';
-import {withRouter, Link} from 'react-router-dom';
+import React from 'react';
+import {Link, useLocation} from 'react-router-dom';
+import {connect} from 'react-redux';
 
-class Nav extends Component {
-    render() {
-        return (
-            <div className='nav-container'>
-                {this.props.location.pathname !== '/'
-                    ? (
-                        <nav>
-                            <Link to='/dashboard' className='nav-links'>
-                                <button>Home</button>                        
-                            </Link>
-                            <Link to='/new' className='nav-links'>
-                                <button>New Post</button>                        
-                            </Link>
-                            <Link to='/' className='nav-links'>
-                                <button>Logout</button>                       
-                            </Link>
-                        </nav>
-                    )
-                    : null
-                }
-            </div>
-        );
-    }
+const Nav = props => {
+    const location = useLocation();
+    console.log(props);
+    return (
+        <div className='nav-container'>
+            {location.pathname !== '/'
+                ? (
+                    <nav>
+                        <div>
+                            <img src={props.user.profile_picture} alt={props.user.profile_picture}/>
+                            <p>{props.user.username}</p>
+                        </div>
+                        <Link to='/dashboard' className='nav-links'>
+                            <button>Home</button>                        
+                        </Link>
+                        <Link to='/new' className='nav-links'>
+                            <button>New Post</button>                        
+                        </Link>
+                        <Link to='/' className='nav-links'>
+                            <button>Logout</button>                       
+                        </Link>
+                    </nav>
+                )
+                : null
+            }
+        </div>
+    );
 };
 
-export default withRouter(Nav);
+const mapStateToProps = reduxState => reduxState;
+
+export default connect(mapStateToProps)(Nav);
