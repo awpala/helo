@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
+import axios from 'axios';
 
 class Dashboard extends Component {
     constructor(props) {
@@ -18,7 +19,11 @@ class Dashboard extends Component {
     }
 
     handleSearch = () => {
-        // TO-DO
+        const { user_id, username } = this.props.user;
+        const { isMyPost, searchTerm } = this.state;
+        axios.get(`/api/posts/${user_id}&userposts=${isMyPost}&search=${searchTerm}`)
+        .then(res => this.setState({ posts: res.data }))
+        .catch(err => console.log(err));
     }
 
     handleReset = () => {
@@ -33,7 +38,7 @@ class Dashboard extends Component {
         const mappedPosts = this.state.posts.map(post => (
             <div className='posts'>
                 <p>{post.title}</p>
-                <p>by {post.author_id}</p>
+                <p>by {post.username}</p>
                 <img key={post.post_id} src={post.profile_picture} alt='post'/>
             </div>
         ));

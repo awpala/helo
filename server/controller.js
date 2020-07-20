@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 
 module.exports = {
+    // auth middleware
     register: async (req, res) => {
         const {username, password, profile_picture} = req.body,
             db = req.app.get('db');
@@ -19,7 +20,7 @@ module.exports = {
     },
     login: async (req, res) => {
         const {username, password} = req.body,
-        db = req.app.get('db');
+            db = req.app.get('db');
 
         const foundUser = await db.users.check_user({username});
         if(!foundUser[0]){
@@ -34,5 +35,31 @@ module.exports = {
         delete foundUser[0].password;
         req.session.user = foundUser[0];
         res.status(202).send(req.session.user);
+    },
+    // posts middleware
+    getPosts: (req, res) => {
+        const { id } = req.params,
+            db = req.app.get('db');
+        
+        let { userposts, search } = req.query;
+        userposts = (userposts === "true") ? true : false; // convert query string to Boolean
+
+        if (userposts && search) {
+            db.posts.get_user_titled_posts(id, search)
+            .then(posts => res.status(200).send(posts))
+            .catch(err => res.status(500).send(err));
+        } else if (!userposts && !search) {
+            db.posts.get_not_user_posts(id)
+            .then(posts => res.status(200).send(posts))
+            .catch(err => res.status(500).send(err));
+        } else if (!userposts && search) {
+            db.posts.get_not_user_titled_posts(id, search)
+            .then(posts => res.status(200).send(posts))
+            .catch(err => res.status(500).send(err));
+        } else if (userposts && !search) {
+            db.posts.get_user_posts(id)
+            .then(posts => res.status(200).send(posts))
+            .catch(err => res.status(500).send(err));
+        }
     }
 }

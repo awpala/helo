@@ -31,4 +31,7 @@ massive({
 app.post('/api/register', ctrl.register);
 app.post('/api/login', ctrl.login);
 
+// post endpoints
+app.get('/api/posts/:id', ctrl.getPosts);
+
 app.listen(port, () => console.log(`Running server on port ${port}`));
